@@ -87,23 +87,39 @@ class TestFileStorage(unittest.TestCase):
     def test_save(self):
         """Test that save properly saves objects to file.json"""
 
-    def test_get_db(self):
-        """ Tests for obtaining an instance db storage"""
-        dic = {"name": "Cundinamarca"}
-        instance = State(**dic)
-        DBStorage.new(instance)
-        DBStorage.save()
-        get_instance = DBStorage.get(State, instance.id)
-        self.assertEqual(get_instance, instance)
-
+    def test_get(self):
+        """Test that get retrieves an object based on class and ID"""
+        state = self.storage.get(State, self.state.id)
+        self.assertIsNotNone(state)
+        self.assertEqual(state.id, self.state.id)
+        
+        city = self.storage.get(City, self.city.id)
+        self.assertIsNotNone(city)
+        self.assertEqual(city.id, self.city.id)
+        
+        none_obj = self.storage.get(State, "non-existent-id")
+        self.assertIsNone(none_obj)
+        
     def test_count(self):
-        """ Tests for checking the count method db storage """
-        dic = {"name": "Vecindad"}
-        state = State(**dic)
-        DBStorage.new(state)
-        dic = {"name": "Mexico", "state_id": state.id}
-        city = City(**dic)
-        DBStorage.new(city)
-        DBStorage.save()
-        c = DBStorage.count()
-        self.assertEqual(len(DBStorage.all()), c)
+        """Test that count correctly counts objects"""
+        state_count = self.storage.count(State)
+        self.assertEqual(state_count, 1)
+        
+        city_count = self.storage.count(City)
+        self.assertEqual(city_count, 1)
+        
+        total_count = self.storage.count()
+        self.assertEqual(total_count, 2)
+        
+        self.storage._DBStorage__session.delete(self.state)
+        self.storage._DBStorage__session.delete(self.city)
+        self.storage._DBStorage__session.commit()
+        
+        state_count = self.storage.count(State)
+        self.assertEqual(state_count, 0)
+        
+        city_count = self.storage.count(City)
+        self.assertEqual(city_count, 0)
+        
+        total_count = self.storage.count()
+        self.assertEqual(total_count, 0)
