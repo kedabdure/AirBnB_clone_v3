@@ -113,3 +113,40 @@ class TestFileStorage(unittest.TestCase):
         with open("file.json", "r") as f:
             js = f.read()
         self.assertEqual(json.loads(string), json.loads(js))
+
+    def test_get(self):
+        """Test that get retrieves an object based on class and ID"""
+        state = self.storage.get(State, "state_test_id")
+        self.assertIsNotNone(state)
+        self.assertEqual(state.id, "state_test_id")
+        
+        city = self.storage.get(City, "city_test_id")
+        self.assertIsNotNone(city)
+        self.assertEqual(city.id, "city_test_id")
+        
+        none_obj = self.storage.get(State, "non_existent_id")
+        self.assertIsNone(none_obj)
+        
+    def test_count(self):
+        """Test that count correctly counts objects"""
+        state_count = self.storage.count(State)
+        self.assertEqual(state_count, 1)
+        
+        city_count = self.storage.count(City)
+        self.assertEqual(city_count, 1)
+        
+        total_count = self.storage.count()
+        self.assertEqual(total_count, 2)
+        
+        # Test with no objects
+        self.storage._DBStorage__objects.clear()
+        
+        state_count = self.storage.count(State)
+        self.assertEqual(state_count, 0)
+        
+        city_count = self.storage.count(City)
+        self.assertEqual(city_count, 0)
+        
+        total_count = self.storage.count()
+        self.assertEqual(total_count, 0)
+
