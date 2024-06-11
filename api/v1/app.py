@@ -4,14 +4,11 @@ from models import storage
 from api.v1.views import app_views
 from os import environ
 from flask import Flask, jsonify, make_response
-from flasgger import Swagger
 
 
 app = Flask(__name__)
 app.register_blueprint(app_views)
 app.config['JSONIFY_PRETTYPRINT_REGULAR'] = True
-
-swagger = Swagger(app)
 
 
 @app.teardown_appcontext
