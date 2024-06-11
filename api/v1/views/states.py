@@ -45,11 +45,11 @@ def POST_state():
     """Adds state, raise 400 if not valid JSON"""
     post_content = request.get_json()
 
-    if not request.get_json():
+    if not request.is_json:
         abort(400, description="Not a JSON")
 
     name = post_content.get('name')
-    if not name:
+    if name is None:
         abort(400, description="Missing name")
 
     # send in user input(key:value) to create new object
