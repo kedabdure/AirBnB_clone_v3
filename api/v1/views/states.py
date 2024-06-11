@@ -67,9 +67,12 @@ def PUT_state(state_id):
 
     ignore_keys = ["id", "created_at", "updated_at"]
 
+    # Check if the request contains JSON data
+    if not request.is_json:
+        abort(400, description="Not a JSON")
+    
     content = request.get_json()
-
-    if not content:
+    if content is None:
         abort(400, description="Not a JSON")
 
     for key, val in content.items():
