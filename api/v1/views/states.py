@@ -69,7 +69,7 @@ def PUT_state(state_id):
 
     content = request.get_json()
 
-    if not request.get_json():
+    if not content:
         abort(400, description="Not a JSON")
 
     for key, val in content.items():
