@@ -13,6 +13,7 @@ app.config['JSONIFY_PRETTYPRINT_REGULAR'] = True
 
 swagger = Swagger(app)
 
+
 @app.teardown_appcontext
 def teardown_db(error):
     """ Close Storage """
