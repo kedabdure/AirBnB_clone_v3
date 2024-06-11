@@ -70,7 +70,7 @@ def PUT_state(state_id):
     # Check if the request contains JSON data
     if not request.is_json:
         abort(400, description="Not a JSON")
-    
+
     content = request.get_json()
     if content is None:
         abort(400, description="Not a JSON")
