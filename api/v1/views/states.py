@@ -43,9 +43,9 @@ def DEL_state(state_id):
 @app_views.route('/states', methods=['POST'], strict_slashes=False)
 def POST_state():
     """Adds state, raise 400 if not valid JSON"""
-    post_content = request.get_json()
+    post_content = request.to_json()
 
-    if not request.is_json:
+    if not post_content:
         abort(400, description="Not a JSON")
 
     name = post_content.get('name')
